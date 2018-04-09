@@ -1,0 +1,56 @@
+<style>
+ul { width: 100%;clear:both;height:32px;list-style-type:none;margin:0;padding:0; }
+li { width: 14%;height:32px;float: left;list-style-type:none;margin:0;padding:0; }
+</style>
+<p>Select Team : 
+<select [(ngModel)]="selectedTeam" name="selectedTeam1" #selectedTeam1>
+    <option [value]=null>Select Team</option>
+    <option *ngFor="let t of teams" value= {{t.teamId}}>{{t.teamName}}</option>
+</select>
+
+
+<select [(ngModel)]="selectedWeekEnd" name="selectedWeekEnd1" #selectedWeekEnd1>
+    <option [value]=null>Select WeekEnd</option>
+    <option *ngFor="let weekEnd of weekEnds" value= {{weekEnd}}>{{weekEnd}}</option>
+</select>
+<button (click)="getWeekAssignments(selectedTeam1.value,selectedWeekEnd1.value)">
+    Submit
+</button> 
+</p>
+
+<span *ngIf="!isSuccess"> {{errorMessage}}</span>
+
+<table class="table table-striped table-bordered table-hover table-condensed" *ngIf="isShowResult">
+    <tr>
+        <th>Project Details</th>
+        <th *ngFor="let employee of employees">
+            {{employee.firstName}} {{employee.lastName}}({{employee.soeid}})
+        </th>
+        <th>Total Hours</th>
+        <th>Remaing Hours</th>
+    </tr>
+    <tr *ngFor="let employeeHourRow of weekAssignments">
+        <td *ngFor="let employeeHourCol of employeeHourRow">
+            <span *ngIf="employeeHourCol.soeid">
+                <input [disabled]="employeeHourCol.disabled" type="text" [(ngModel)]="employeeHourCol.hours" 
+                        (input)="updateRemaingHour(projectedHour1.value,employeeHourRow,$event.target.value)"
+                                    name = "projectedHour" #projectedHour="ngModel">
+                <input type="hidden" [(ngModel)]="employeeHourCol.hours" name = "projectedHour1" #projectedHour1="ngModel">
+            </span>
+            <span *ngIf="!employeeHourCol.soeid && !employeeHourCol.totHours">
+                {{employeeHourCol.pNumber}}-{{employeeHourCol.oppm}}-{{employeeHourCol.projectDesc}}
+                <b style="float:right">{{employeeHourCol.projectRelease}} </b></span>
+            <span *ngIf="employeeHourCol.totHours && !employeeHourCol.remainingHours">{{employeeHourCol.totHours}}</span>
+            <span *ngIf="employeeHourCol.remainingHours">
+                {{employeeHourCol.remainingHours}}</span>
+        </td>
+    </tr>
+</table>
+<span *ngIf="isShowResult">
+<button (click)="submitPlanViewWeekly('save')">
+    Save
+</button> 
+<button (click)="submitPlanViewWeekly('submit')">
+    Submit
+</button> 
+</span>

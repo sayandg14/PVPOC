@@ -1,0 +1,82 @@
+<style>
+ul { width: 100%;clear:both;height:32px;list-style-type:none;margin:0;padding:0; }
+li { width: 14%;height:32px;float: left;list-style-type:none;margin:0;padding:0; }
+</style>
+<p>Select Team : 
+<select [(ngModel)]="selectedTeam" name="selectedTeam1" #selectedTeam1 
+                                        (change)="onChange($event)">
+    <option [value]=null>Select Team</option>
+    <option *ngFor="let t of teams" value= {{t.teamId}}>{{t.teamName}}</option>
+</select>
+</p>
+
+
+
+<h3>Projects:</h3>
+<table class="table table-striped table-bordered table-hover table-condensed">
+<tr>
+    <td>P# Number</td><td>OPPM Number</td><td>Project Description</td><td>Release</td>
+    <td>Estimated Hours</td><td>Assigned</td><td>Action</td>
+</tr>
+<tr *ngFor="let projectByTeam of projectsByTeam">
+    <td>{{projectByTeam.pNumber}}</td>
+    <td>{{projectByTeam.oppm}}</td>
+    <td>{{projectByTeam.projectDesc}}</td>
+    <td>{{projectByTeam.monthRelease}}-{{projectByTeam.yearRelease}}</td>
+    <td>{{projectByTeam.hours}}</td>
+    <td>{{projectByTeam.assigned}}</td>
+    <td>
+        <span *ngIf="projectByTeam.assigned=='N'">
+            <button (click)="assignProject(projectByTeam);assignmentModal.open()">Assign</button>
+        </span>
+        <span *ngIf="projectByTeam.assigned=='Y'">
+            <button (click)="viewProject(projectByTeam);assignmentModal.open()">View</button>
+        </span>
+    </td>
+</tr>
+</table>
+
+<div class="row">
+    <modal #assignmentModal [hidden]="hideModal" id="assignmentModal" >
+        <modal-header>
+            Assign Team Member for Project : {{selectedProject.pNumber}}
+            -{{selectedProject.oppm}}-{{selectedProject.projectDesc}} <br />
+            Assign equally to selected people
+            <input type="checkbox" (change)="assignEqualAssignment($event.target.checked)" 
+                        [disabled]="isAssignEqualDisabled()" [(ngModel)]="isAssignEqual" /> Yes <br/>
+            Total Hours of Project : {{selectedProject.hours}} 
+            Remaining Hours : {{remainingHours}}
+            <br/>
+            {{wrongHoursAssignmenetMessage}}
+        </modal-header>
+        <modal-content>
+
+            <table width="500px" class="">
+                <div *ngFor="let teamMember of teamMembers">
+                    <tr>
+
+                    <td width="350px">{{teamMember.lastName}}, {{teamMember.firstName}} ({{teamMember.soeid}}) </td>
+                    <td width="100px">
+                        <span *ngIf="!isAssignEqual && isAssigned(teamMember,true)">
+                            <input type = "text" value="{{individualHour}}" 
+                                            (input)="onChangeHourTextBox(teamMember,$event.target.value)">
+                        </span>
+                        <span *ngIf="isAssignEqual && isAssigned(teamMember,false)"> {{individualHour}} </span>
+                    </td>
+                    <td width="50px"><span style="float: right" *ngIf="isAssignEqual"> <input type="checkbox" 
+                        [checked]="isAssigned(teamMember,false)" [disabled]="!isDisabledcheckbox()"
+                        (change)="assignEmployee(teamMember,selectedProject,$event.target.checked)" /></span>
+                        
+                    </td>
+                    </tr>
+                </div>
+            </table>
+
+        </modal-content>
+        <modal-footer>
+            <button class="btn btn-primary" (click)="submitSelectedEmployees();">Submit</button>
+        </modal-footer>
+    </modal>
+
+    
+</div>

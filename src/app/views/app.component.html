@@ -1,0 +1,44 @@
+<html>
+<head>
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #3db2e1;
+    font-family: aria-bold;
+}
+
+li {
+    float: left;
+    width: 20%;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    color: #dff2fa;
+    text-decoration: underline;
+}
+</style>
+</head>
+<body>
+
+<ul>
+  <li><a class="active" [routerLink] = "['/planViewWeekly']">Plan View Weekly Assignment</a></li>
+  <li><a [routerLink] = "['/projectAssignment']">Project Assignment</a></li>
+  <li><a [routerLink] = "['/projects']">projects</a></li>
+  <li><a [routerLink] = "['/employees']">employees</a></li>
+  <li><a [routerLink] = "['/lastWeekOOO']">Last Week Data</a></li>
+</ul>
+<router-outlet></router-outlet>
+
+</body>
+</html>

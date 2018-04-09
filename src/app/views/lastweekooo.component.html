@@ -1,0 +1,28 @@
+<style>
+ul { width: 100%;clear:both;height:32px;list-style-type:none;margin:0;padding:0; }
+li { width: 20%;height:32px;float: left;list-style-type:none;margin:0;padding:0; }
+</style>
+<h3>Employees:</h3>
+<table class="table table-striped table-bordered table-hover table-condensed">
+<tr>
+    <td>SOEID</td><td>First Name</td><td>Last Name</td><td>Last Week Filled Hour</td><td>Last Week OOO</td>
+</tr>
+    <tr *ngFor="let lastWeekOOODTO of lastWeekOOODTOs">
+        <td>{{lastWeekOOODTO.soeid}}</td>
+        <td>{{lastWeekOOODTO.firstName}}</td>
+        <td>{{lastWeekOOODTO.lastName}}</td>
+        <td>
+            <input type="text" [(ngModel)]="lastWeekOOODTO.hoursFilled" 
+                        name = "hoursFilled" #hoursFilled="ngModel">
+        </td>
+        <td>
+            <input type="text" [(ngModel)]="lastWeekOOODTO.lastWeekOoo" 
+                        name = "lastWeekOoo" #lastWeekOoo="ngModel">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="5"><button (click)="save()">Save</button></td>
+    </tr>
+</table>
+
+<p class="error" *ngIf="errorMessage">{{errorMessage}}</p>
